@@ -13,8 +13,7 @@ variables:
   # Container registry service connection established during pipeline creation
   dockerRegistryServiceConnection: '1ba01563-a8cf-4fca-8166-9fc783c2c96b'
   containerRegistry: 'acrt2cop4qj.azurecr.io'
-  # dockerfilePath: '**/Dockerfile'
-  dockerfilePath: '**/docker-compose-quickstart.yml'
+  dockerfilePath: '**/Dockerfile'  
   tag: '$(Build.BuildId)'
   imagePullSecret: 'acrt2cop4qjbb0a-auth'
 
@@ -36,7 +35,7 @@ stages:
       displayName: Build and push store-front image
       inputs:
         command: buildAndPush
-        repository: aks-store-demo/store-front
+        repository: src/aks-store-demo/store-front
         dockerfile: store-front/Dockerfile
         containerRegistry: $(dockerRegistryServiceConnection)
         tags: |
@@ -46,7 +45,7 @@ stages:
       displayName: Build and push product-service image
       inputs:
         command: buildAndPush
-        repository: aks-store-demo/product-service
+        repository: src/aks-store-demo/product-service
         dockerfile: product-service/Dockerfile
         containerRegistry: $(dockerRegistryServiceConnection)
         tags: |
@@ -56,7 +55,7 @@ stages:
       displayName: Build and push order-service image
       inputs:
         command: buildAndPush
-        repository: aks-store-demo/order-service
+        repository: src/aks-store-demo/order-service
         dockerfile: order-service/Dockerfile
         containerRegistry: $(dockerRegistryServiceConnection)
         tags: |
