@@ -1,0 +1,19 @@
+apiVersion : apps/v1
+kind: Deployment
+metadata:
+  name: colmcharltonaksstoredemo 
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: colmcharltonaksstoredemo
+  template:
+    metadata:
+      labels:
+        app: colmcharltonaksstoredemo 
+    spec:
+      containers:
+        - name: colmcharltonaksstoredemo 
+          image: acrt2cop4qj.azurecr.io/colmcharltonaksstoredemo
+          ports:
+          - containerPort: 5001
