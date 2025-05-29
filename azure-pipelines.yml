@@ -12,7 +12,6 @@ variables:
 
   # Container registry service connection established during pipeline creation
   dockerRegistryServiceConnection: '1ba01563-a8cf-4fca-8166-9fc783c2c96b'
-  imageRepository: 'colmcharltonaksstoredemo'
   containerRegistry: 'acrt2cop4qj.azurecr.io'
   dockerfilePath: '**/Dockerfile'
   tag: '$(Build.BuildId)'
@@ -33,17 +32,38 @@ stages:
       name: $(vmImageName)
     steps:
     - task: Docker@2
-      displayName: Build and push an image to container registry
+      displayName: Build and push store-front image
       inputs:
         command: buildAndPush
-        repository: $(imageRepository)
-        dockerfile: $(dockerfilePath)
+        repository: aks-store-demo/store-front
+        dockerfile: store-front/Dockerfile
+        containerRegistry: $(dockerRegistryServiceConnection)
+        tags: |
+          $(tag)
+
+    - task: Docker@2
+      displayName: Build and push product-service image
+      inputs:
+        command: buildAndPush
+        repository: aks-store-demo/product-service
+        dockerfile: product-service/Dockerfile
+        containerRegistry: $(dockerRegistryServiceConnection)
+        tags: |
+          $(tag)
+
+    - task: Docker@2
+      displayName: Build and push order-service image
+      inputs:
+        command: buildAndPush
+        repository: aks-store-demo/order-service
+        dockerfile: order-service/Dockerfile
         containerRegistry: $(dockerRegistryServiceConnection)
         tags: |
           $(tag)
 
     - upload: manifests
       artifact: manifests
+
 
 - stage: Deploy
   displayName: Deploy stage
@@ -67,7 +87,7 @@ stages:
               dockerRegistryEndpoint: $(dockerRegistryServiceConnection)
 
           - task: KubernetesManifest@0
-            displayName: Deploy to Kubernetes cluster
+            displayName: Deploy store-front to AKS
             inputs:
               action: deploy
               manifests: |
@@ -76,5 +96,6 @@ stages:
               imagePullSecrets: |
                 $(imagePullSecret)
               containers: |
-                $(containerRegistry)/$(imageRepository):$(tag)
-
+                $(containerRegistry)/aks-store-demo/store-front:$(tag)
+                $(containerRegistry)/aks-store-demo/product-service:$(tag)
+                $(containerRegistry)/aks-store-demo/order-service:$(tag)
