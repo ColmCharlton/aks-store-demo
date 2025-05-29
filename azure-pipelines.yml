@@ -35,8 +35,8 @@ stages:
       displayName: Build and push store-front image
       inputs:
         command: buildAndPush
-        repository: src/aks-store-demo/store-front
-        dockerfile: store-front/Dockerfile
+        repository: aks-store-demo/store-front
+        dockerfile: src/store-front/Dockerfile
         containerRegistry: $(dockerRegistryServiceConnection)
         tags: |
           $(tag)
@@ -45,8 +45,8 @@ stages:
       displayName: Build and push product-service image
       inputs:
         command: buildAndPush
-        repository: src/aks-store-demo/product-service
-        dockerfile: product-service/Dockerfile
+        repository: aks-store-demo/product-service
+        dockerfile: src/product-service/Dockerfile
         containerRegistry: $(dockerRegistryServiceConnection)
         tags: |
           $(tag)
@@ -55,8 +55,8 @@ stages:
       displayName: Build and push order-service image
       inputs:
         command: buildAndPush
-        repository: src/aks-store-demo/order-service
-        dockerfile: order-service/Dockerfile
+        repository: aks-store-demo/order-service
+        dockerfile: src/order-service/Dockerfile
         containerRegistry: $(dockerRegistryServiceConnection)
         tags: |
           $(tag)
