@@ -13,7 +13,8 @@ variables:
   # Container registry service connection established during pipeline creation
   dockerRegistryServiceConnection: '1ba01563-a8cf-4fca-8166-9fc783c2c96b'
   containerRegistry: 'acrt2cop4qj.azurecr.io'
-  dockerfilePath: '**/Dockerfile'
+  # dockerfilePath: '**/Dockerfile'
+  dockerfilePath: '**/docker-compose-quickstart.yml'
   tag: '$(Build.BuildId)'
   imagePullSecret: 'acrt2cop4qjbb0a-auth'
 
