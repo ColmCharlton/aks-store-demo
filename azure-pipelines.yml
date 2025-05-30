@@ -75,7 +75,7 @@ stages:
     steps:
     - script: |
         echo "Running cargo tests..."
-        cd src/product-service
+        cd src/product-service/tests
         cargo test --all
       displayName: Run cargo test
 
@@ -86,7 +86,7 @@ stages:
     steps:
     - script: |
         echo "Running npm tests..."
-        cd src/order-service
+        cd src/order-service/test
         npm install
         npm test
       displayName: Run npm test
