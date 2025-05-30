@@ -46,7 +46,7 @@ stages:
       inputs:
         command: buildAndPush
         repository: aks-store-demo/product-service
-        dockerfile: src/product-service/Dockerfile
+        dockerfile: product-service/Dockerfile
         containerRegistry: $(dockerRegistryServiceConnection)
         tags: |
           $(tag)
@@ -56,7 +56,7 @@ stages:
       inputs:
         command: buildAndPush
         repository: aks-store-demo/order-service
-        dockerfile: src/order-service/Dockerfile
+        dockerfile: order-service/Dockerfile
         containerRegistry: $(dockerRegistryServiceConnection)
         tags: |
           $(tag)
@@ -64,10 +64,36 @@ stages:
     - upload: manifests
       artifact: manifests
 
+- stage: Test
+  displayName: Test stage
+  dependsOn: Build
+  jobs:
+  - job: RustTests
+    displayName: Run Rust (cargo) tests
+    pool:
+      name: $(vmImageName)
+    steps:
+    - script: |
+        echo "Running cargo tests..."
+        cd src/product-service
+        cargo test --all
+      displayName: Run cargo test
+
+  - job: NodeTests
+    displayName: Run Node.js (npm) tests
+    pool:
+      name: $(vmImageName)
+    steps:
+    - script: |
+        echo "Running npm tests..."
+        cd src/order-service
+        npm install
+        npm test
+      displayName: Run npm test
 
 - stage: Deploy
   displayName: Deploy stage
-  dependsOn: Build
+  dependsOn: [Build, Test]
 
   jobs:
   - deployment: Deploy
