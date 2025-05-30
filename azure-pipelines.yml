@@ -46,7 +46,7 @@ stages:
       inputs:
         command: buildAndPush
         repository: aks-store-demo/product-service
-        dockerfile: product-service/Dockerfile
+        dockerfile: src/product-service/Dockerfile
         containerRegistry: $(dockerRegistryServiceConnection)
         tags: |
           $(tag)
@@ -56,7 +56,7 @@ stages:
       inputs:
         command: buildAndPush
         repository: aks-store-demo/order-service
-        dockerfile: order-service/Dockerfile
+        dockerfile: src/order-service/Dockerfile
         containerRegistry: $(dockerRegistryServiceConnection)
         tags: |
           $(tag)
